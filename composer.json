@@ -11,7 +11,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Rikwest\\": "src/"
+            "Reqwest\\": "src/"
         }
     },
     "license": "MIT",
