@@ -63,7 +63,7 @@ class JSONRequest extends BaseRequest
         } catch(RequestException $e) {
             $response = $e->getResponse();
         }
-        return new JSONREsponse($response);
+        return new JSONResponse($response);
     }
 
     /**

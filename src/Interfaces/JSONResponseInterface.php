@@ -10,9 +10,9 @@ interface JSONResponseInterface extends ResponseInterface
     /**
      * Get all the body of the response as an array.
      *
-     * @return array
+     * @return mixed
      */
-    public function all(): array;
+    public function all();
 
     /**
      * Check if a field exists in the body.
