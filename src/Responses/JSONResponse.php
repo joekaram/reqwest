@@ -34,9 +34,9 @@ class JSONResponse extends BaseResponse implements JSONResponseInterface
     /**
      * Get all the body of the response as an array.
      *
-     * @return array
+     * @return mixed
      */
-    public function all(): array
+    public function all()
     {
         return $this->body;
     }
