@@ -1,57 +1,41 @@
 # Reqwest
 
-Reqwest is a simple request handler built over guzzle http.<br>
-The main purpose behind **Reqwest** is to simplify the code for making http requests.<br>
+Reqwest is a simple request handler built over [Guzzle HTTP](https://github.com/guzzle/guzzle).<br>
+The main purpose behind Reqwest is to simplify the code for making http requests.
 
-<a name="table-of-contents"></a>
+Check out the [documentation](https://reqwest.karam.app).
 
-## Table of Contents
+## Getting Started
 
-1. [Installing Request](#installing-request)
-2. [Requests](#requests)
-3. [Request Headers](#request-headers)
-4. [JSON Requests](#json-requests)
-5. [Responses](#responses)
-6. [Response Status Code](#response-status-code)
-6. [Response Headers](#response-headers)
-6. [Failed Requests](#failed-requests)
-6. [JSON Response](#json-response)
+### Prerequisites
 
-<a name="installing-reqwest"></a>
+The recommended way to install Reqwest is using [Composer](https://getcomposer.org).<br>
 
-## Installing Reqwest
-
-The recommended way to install Reqwest is using composer.
 ```
 # Install Composer
 curl -sS https://getcomposer.org/installer | php
 ```
 
-Next, run the composer command to install the latest version of Reqwest.
+### Installation
+
+Run the composer command to install the latest version of Reqwest.
+
 ```
 php composer.phar require karam/reqwest
 // or
 composer require karam/reqwest
 ```
 
-[Back to Table of Contents](#table-of-contents)
+# Requests
 
-<a name="requests"></a>
+## Headers
 
-## Requests
+When making requests, you can add, update, or remove headers.<br>
 
-<a name="request-headers"></a>
+### Adding Headers
 
-### Request Headers
+You can add multiple headers by chaining the `addHeader($key, $value)` method, but there is another way to do so using the `addHeaders()` method.
 
-#### Adding Request Headers
-When making requests, you can add, update, or remove headers.
-```
-// Adding a single header.
-$request->addHeader($key, $value);
-$request->addHeader('Content-Type', 'appilcation/json');
-```
-Of course you can add multiple headers by chaining the `addHeader($key, $value)` method, but there is another way to do so using the `addHeaders()` method.
 ```
 // Method chaining:
 $request->addHeader('Content-Type', 'application/json')
@@ -64,118 +48,123 @@ $request->addHeaders([
 ])
 ```
 
-#### Updating Headers
-You can update an existing header using the following function:
+### Updating Headers
+
+You can update an existing header using the following method:
+
 ```
 $request->updateHeader('Content-Type', 'application/json');
 ```
 
-#### Deleting Headers
+### Deleting Headers
+
 You can remove an added header using the `deleteHeader($key)` method.
+
 ```
 $request->deleteHeader('Content-Type');
 ```
 
-[Back to Table of Contents](#table-of-contents)
+## JSON Requests
 
-<a name="json-requests"></a>
+JSON Requests are regular requests with Content-Type header automatically set to application/json.
 
-### JSON Requests
-JSON Requests are regular requests with `Content-Type` header automatically set to `application/json`.
+!> You must first include the JSON Request class: `use Reqwest\Requests\JSONRequest;`
 
-#### GET, DELETE
+Create a new request instance.
+```
+$request = new JSONRequest;
+```
+
+### GET & DELETE
+
 To perform a get or delete request, you only need to pass the `$url`.
+
 ```
 $url = "http://example.com/api/json";
 
 // GET Request
-$response = $json_request->get($url);
+$response = $request->get($url);
 
 // DELETE Request
-$response = $json_request->delete($url);
+$response = $request->delete($url);
 ```
 
-#### POST, PUT, PATCH
+### POST, PUT & PATCH
+
 To perform a post, put, or patch request, you will need to pass the `$url` and an optional `$body` array.
+
 ```
 // POST Request
-$response = $json_request->post($url, [
+$response = $request->post($url, [
     'field1' => 'value1',
     'field2' => 'value2',
     'field3' => 'value3'
 ]);
 
 // PUT Request
-$response = $json_request->put($url, [
+$response = $request->put($url, [
     'field1' => 'value1',
     'field2' => 'value2',
     'field3' => 'value3'
 ]);
 
 // PATCH Request
-$response = $json_request->patch($url, [
+$response = $request->patch($url, [
     'field1' => 'value1',
     'field2' => 'value2',
     'field3' => 'value3'
 ]);
 ```
 
-[Back to Table of Contents](#table-of-contents)
+# Responses
 
-<a name="responses"></a>
+All requests return a response object.
 
-## Responses
+!> Instead of returning `null`, a failed request will return a response with a status code equal to `0` and a body with a `message` field.
 
-<a name="response-status-code"></a>
+## Status Code
 
-### Response Status Code
-Use `getStatusCode()` on the response object to get the status code. The method returns `int`.
+You can get the status code of the response using the following method:
+
 ```
-$response->getStatusCode().
+$response->getStatusCode();
 ```
 
-[Back to Table of Contents](#table-of-contents)
+## Headers
 
-<a name="response-headers"></a>
-
-### Response Headers
-You can get all headers from the response as a key-value array.
-```
-$headers = $response->headers();
-```
+### Checking Headers
 
 To check if a response has a certain header, use the `hasHeader($key)` method.
+
 ```
 $response->hasHeader('Content-Type');
 ```
 
-To get a single header, use the `header($key)` method.<br>
-If the specified header doesn't exist, `null` will be returned.
+To get a single header, use the header($key) method.
+
+### Getting Headers
+
+You can get all headers from the response as a key-value array.
+
+```
+$response->headers();
+```
+
+To get a single header, use the `header($key)` method.
+
 ```
 $response->header('Content-Type');
 ```
 
-[Back to Table of Contents](#table-of-contents)
+!> If the specified header doesn't exist, `null` will be returned.
 
-<a name="failed-requests"></a>
+## JSON Response
 
-### Failed Requests
-If a request failed for some reason (e.g: connection issues), the status code will be set to zero (`0`).
+JSON Responses are returned from JSON Requests.
+
+To get the body of a JSON response as a key-value array:
 ```
-$failed_response = $request->get($url);
-$failed_response->getStatusCode(); // returns 0
-```
-
-[Back to Table of Contents](#table-of-contents)
-
-<a name="json-response"></a>
-
-### JSON Response
-JSON responses are returned from JSON Requests.<br>
-
-To get the body of a JSON response as an array:
-```
-$json_response->all(); // Returns a key-value array.
+$json_response->all();
 ```
 
 To check if the body of the JSON Response has a certain field:
@@ -183,17 +172,11 @@ To check if the body of the JSON Response has a certain field:
 $json_response->has('field_name');
 ```
 
-Use the `get($field)` method to get a certain field from the JSON Response. If the field doesn't exist, `null` will be returned. 
+Use the `get($field)` method to get a certain field from the JSON Response.
 ```
 $json_response->get('field_name');
 ```
 
-##### Failed JSON Requests
-A failed JSON request will return a status code equal to zero (`0`) with the following body:
-```
-[
-    'message' => 'Failed to make request.'
-]
-```
+!> If the field doesn't exist, `null` will be returned.
 
-[Back to Table of Contents](#table-of-contents)
+
