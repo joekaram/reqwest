@@ -1,6 +1,6 @@
 # Reqwest
 
-NOTE: Reqwest will soon become [Coorier](https://github.com/joekaram/coorier)<br>
+NOTE: Reqwest is discontinued.
 
 Reqwest is a simple request handler built over [Guzzle HTTP](https://github.com/guzzle/guzzle).<br>
 The main purpose behind Reqwest is to simplify the code for making http requests.
